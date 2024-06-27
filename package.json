@@ -16,9 +16,9 @@
     "instantsearch.js": "^4.72.2",
     "next": "14.2.4",
     "next-auth": "^4.24.7",
-    "react": "^19.0.0-rc-8971381549-20240625",
+    "react": "^18.3.1",
     "react-circle-flags": "^0.0.20",
-    "react-dom": "^19.0.0-rc-8971381549-20240625",
+    "react-dom": "^18.3.1",
     "react-instantsearch": "^7.11.4",
     "react-instantsearch-router-nextjs": "^7.11.4",
     "zustand": "^4.5.4"

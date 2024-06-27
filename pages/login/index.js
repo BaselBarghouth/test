@@ -2,9 +2,12 @@ import SignInButton from "@/components/signin";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function Login({ searchParams }) {
   const { data: session } = useSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <div>
@@ -38,6 +41,8 @@ export default function Login({ searchParams }) {
                       id="email"
                       name="email"
                       type="email"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
                       autoComplete="email"
                       required
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
@@ -53,20 +58,14 @@ export default function Login({ searchParams }) {
                     >
                       Password
                     </label>
-                    <div className="text-sm">
-                      <a
-                        href="#"
-                        className="font-semibold text-yellow-600 hover:text-yellow-500"
-                      >
-                        Forgot password?
-                      </a>
-                    </div>
                   </div>
                   <div className="mt-2">
                     <input
                       id="password"
                       name="password"
                       type="password"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
                       autoComplete="current-password"
                       required
                       className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-yellow-600 sm:text-sm sm:leading-6"
@@ -75,7 +74,7 @@ export default function Login({ searchParams }) {
                 </div>
 
                 <div className="flex flex-col gap-y-4">
-                  <SignInButton />
+                  <SignInButton email={email} password={password} />
                 </div>
               </div>
 
