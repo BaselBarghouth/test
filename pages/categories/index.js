@@ -1,9 +1,9 @@
 import { InstantSearch, Pagination, useInstantSearch } from "react-instantsearch";
-import CustomRefinementList from "./CustomRefinementList";
+import CustomRefinementList from "../../components/CustomRefinementList";
 import algoliasearch from "algoliasearch/lite";
 import "instantsearch.css/themes/algolia.css";
-import CustomSearchBox from "./CustomSearchBox";
-import CustomInfiniteHits from "./CustomInfiniteHits";
+import CustomSearchBox from "../../components/CustomSearchBox";
+import CustomInfiniteHits from "../../components/CustomInfiniteHits";
 
 export default function Layout({ searchQuery }) {
   const searchClient = algoliasearch(

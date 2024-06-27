@@ -1,7 +1,7 @@
 
 import React from "react";
 import { useInfiniteHits } from "react-instantsearch";
-import Card from "../../components/Card";
+import Card from "./Card";
 export default function CustomInfiniteHits(props) {
   const { results } = useInfiniteHits(props);
   return (
