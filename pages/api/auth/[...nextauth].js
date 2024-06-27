@@ -8,6 +8,7 @@ const providers = [
     },
     authorize: async (credentials) => {
         try {
+            
             const response = await fetch(
                 "https://plankton-app-pffl2.ondigitalocean.app/api/auth/local",
                 {
