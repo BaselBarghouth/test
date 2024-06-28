@@ -1,30 +1,37 @@
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-
-export default   create(
+export default create(
   persist(
     (set, get) => ({
       cart: [],
-      addItem: (item) => set((state) => {
-        const existingItem = state.cart.find((cartItem) => cartItem.id === item.id);
-        if (existingItem) {
-          return {
-            cart: state.cart.map((cartItem) =>
-              cartItem.id === item.id
-                ? { ...cartItem, quantity: cartItem.quantity + 1 }
-                : cartItem
-            ),
-          };
-        } else {
-          return {
-            cart: [...state.cart, { ...item, quantity: 1 }],
-          };
-        }
-      }),
-      removeItem: (itemId) => set((state) => ({
-        cart: state.cart.filter((item) => item.id !== itemId),
-      })),
+      addItem: (item) =>
+        set((state) => {
+          const existingItem = state.cart.find(
+            (cartItem) =>
+              cartItem.id === item.id && cartItem.sizes.id === item.sizes.id
+          );
+          if (existingItem) {
+            return {
+              cart: state.cart.map((cartItem) =>
+                cartItem.id === item.id
+                  ? { ...cartItem, quantity: cartItem.quantity + 1 }
+                  : cartItem
+              ),
+            };
+          } else {
+            return {
+              cart: [...state.cart, { ...item, quantity: 1 }],
+            };
+          }
+        }),
+      removeItem: (product) =>
+        set((state) => ({
+          cart: state.cart.filter(
+            (item) =>
+              item.id !== product.id && item.sizes.id !== product.sizes.id
+          ),
+        })),
       clearCart: () => set({ cart: [] }),
       getTotalItems: () => {
         const state = get();
@@ -32,23 +39,21 @@ export default   create(
       },
       getTotalPrice: () => {
         const state = get();
-        return state.cart.reduce((total, item) => total + item.quantity * item.price, 0);
+        return state.cart.reduce((total, item) => {
+          const qty = Number(item.sizes.qty);
+          const price = Number(item.sizes.price.replace(',', '.'));
+          return total + item.quantity * qty * price;
+        }, 0).toFixed(2);
       },
       getTax: () => {
-      
         return 0;
       },
       getEstimateDate: () => {
-
         return 0;
       },
-      getTotalPrice: () => {
-
-        return 100;
-      }
     }),
     {
-      name: 'cart-storage', // name of the item in the storage (must be unique)
-    },
-  ),
-)
+      name: "cart-storage", // name of the item in the storage (must be unique)
+    }
+  )
+);

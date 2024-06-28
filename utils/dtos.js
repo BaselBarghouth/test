@@ -8,9 +8,7 @@ export const hitToProduct = (hit) => {
       id: q.id,
     };
   });
-  
-  // const imageSrc = image_2;
-  return {
+  const product = {
     id: id,
     name: name,
     imageSrc: image_2,
@@ -25,5 +23,7 @@ export const hitToProduct = (hit) => {
     sizes,
     country,
     weight
-  };
+  }
+
+    return product;
 };

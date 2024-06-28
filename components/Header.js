@@ -87,7 +87,7 @@ export default function Header() {
                           height={500}
                           width={500}
                           className="h-8 w-8 rounded-full"
-                          src={user.imageUrl}
+                          src={user.image}
                           alt=""
                         />
                       </MenuButton>
@@ -175,7 +175,7 @@ export default function Header() {
                       height={500}
                       width={500}
                       className="h-10 w-10 rounded-full"
-                      src={user.imageUrl}
+                      src={user.image}
                       alt=""
                     />
                   </div>

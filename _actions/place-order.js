@@ -1,16 +1,24 @@
-"use server";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-
-export default async function placeOrderAction(formData) {
+export default async function placeOrderAction(cart, address, id, total) {
   try {
-    
+    const order = await fetch("/api/hello", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        cart,
+        address,
+        id,
+        total,
+      }),
+    });
+    const data = await order.json();
+
     return {
-        success: true,
-        orderId: "12312312",
+      success: true,
+      orderId: data.orderId,
     };
   } catch (error) {
-    // redirect("/login?error=invalid credentials");
-    return false
+    return false;
   }
 }

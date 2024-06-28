@@ -6,7 +6,6 @@ export default async function Increment(previousState, formData) {
     password: "Test321!@",
     callbackUrl: '/categories',
   });
-console.log({data});
   if (data.error) {
     return false;
   }

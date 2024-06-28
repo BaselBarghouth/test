@@ -11,7 +11,6 @@ export default function SignInButton({target = "/categories",email, password}) {
             password: password,
             callbackUrl: '/categories',
           });
-          console.log({data});  
     } catch (error) {
         setError('Invalid credentials');
     }

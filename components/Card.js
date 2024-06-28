@@ -15,16 +15,14 @@ export default function Card({ hit }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-  const { addItem } = useCartStore((state) => ({
-    addItem: state.addItem,
-    cart: state.cart,
-  }));
+  const { addItem, cart } = useCartStore((state) => state);
   const handleClick = () => {
-    addItem(product);
+    let tmp = product;
+    product.sizes = selectedSizes;
+    addItem(tmp);
     setButtonText("Added!");
     setTimeout(() => setButtonText("Add To Cart"), 2000); // Reset text after 2 seconds
   };
-
   return (
     <div className="p-5 rounded flex flex-col gap-y-2 shadow-lg shadow-gray-500">
       <div className="group relative ">
@@ -61,7 +59,9 @@ export default function Card({ hit }) {
         <div
           className={`h-8 w-8 rounded-full`}
           style={{ backgroundColor: product.availableColors[0] }}
-        ></div>
+        >
+
+        </div>
         <CircleFlag countryCode={product.country} height="32" width="32" />
       </div>
       <div>
