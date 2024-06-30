@@ -1,6 +1,8 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
+import { getServerSession } from 'next-auth'
+import { getSession } from 'next-auth/react'
 
 
 
@@ -8,7 +10,39 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({orders}) {
+export default function Example({ orders ,orders2}) {
+
+
+  const test = orders2.map(({order,orderItems}) => {
+    const { id,attributes:{ address, status, total, createdAt} } = order
+    const data = orderItems.map((item) => {
+      const { product, qty, quantity_and_price } = item.attributes
+      const { data: { attributes: product_attributes } } = product;
+      const { data: { attributes: quantity_and_prices_attributes } } = quantity_and_price;
+      return {
+        name: product_attributes.name,
+        color: product_attributes.color,
+        size: qty * quantity_and_prices_attributes.qty,
+        imageSrc: product_attributes.image_2,
+        country: product_attributes.country,
+        step: 1,
+  
+      }
+    })
+    // const normalizedStatus = status.trim().toLowerCase();
+    // const step = 'pending' == normalizedStatus ? 0 : 'processing' == normalizedStatus ? 1 : 'shipped' == normalizedStatus ? 2 : 3;
+    return {
+      number:id,
+      address,
+      status,
+      total,
+      createdDatetime:createdAt,
+      createdDate:createdAt,
+      products: data
+    }
+  })
+console.log
+
   return (
     <div className="bg-white">
       <div className="py-16 sm:py-24">
@@ -25,7 +59,7 @@ export default function Example({orders}) {
           <h2 className="sr-only">Recent orders</h2>
           <div className="mx-auto max-w-7xl sm:px-2 lg:px-8">
             <div className="mx-auto max-w-2xl space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
-              {orders.map((order) => (
+              {test.map((order) => (
                 <div
                   key={order.number}
                   className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
@@ -48,7 +82,7 @@ export default function Example({orders}) {
                       </div>
                       <div>
                         <dt className="font-medium text-gray-900">Total amount</dt>
-                        <dd className="mt-1 font-medium text-gray-900">{order.total}</dd>
+                        <dd className="mt-1 font-medium text-gray-900">  {order.total}</dd>
                       </div>
                     </dl>
 
@@ -175,6 +209,22 @@ export default function Example({orders}) {
 
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const { data } = await doRequest(`orders/?filters[user][email][$eq]=${session.user.email}&populate=*`, "GET");
+  const orders2 = await Promise.all(data.map(async (order) => {
+    const { attributes: { order_items} } = order
+    const orderItemsPromises = order_items.data.map(async (item) => {
+      const { id } = item;
+      const orderItem = await doRequest(`order-items/${id}?populate=*`, "GET");
+      return orderItem.data;
+    });
+
+    const orderItems = await Promise.all(orderItemsPromises);
+    return {
+      order,
+      orderItems
+    }
+  }))
   const orders = [
     {
       number: 'WU88191111',
@@ -204,7 +254,8 @@ export async function getServerSideProps(context) {
   ]
   return {
     props: {
-      orders
+      orders,
+      orders2
     },
   };
 }

@@ -5,7 +5,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Page({ order, orderItems,...searchParams }) {
+export default function Page({ order, orderItems }) {
 
   const { address, status, total, createdAt } = order.data.attributes
   const data = orderItems.map((item) => {
@@ -22,7 +22,6 @@ export default function Page({ order, orderItems,...searchParams }) {
 
     }
   })
-  console.log(searchParams)
   const normalizedStatus = status.trim().toLowerCase();
   const step = 'pending' == normalizedStatus ? 0 : 'processing' == normalizedStatus ? 1 : 'shipped' == normalizedStatus ? 2 : 3;
   return (

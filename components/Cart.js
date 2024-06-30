@@ -15,7 +15,6 @@ export default function Cart() {
   const getTotalItems = useCartStore((state) => state.getTotalItems);
   const [open, setOpen] = useState(false);
   const length = getTotalItems();
-  console.log({ cart });
   return (
     <Popover className="ml-4 flow-root text-sm lg:relative lg:ml-8">
       <PopoverButton
