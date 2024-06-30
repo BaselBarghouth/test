@@ -1,6 +1,6 @@
 export default async function placeOrderAction(cart, address, id, total) {
   try {
-    const order = await fetch("/api/hello", {
+    const order = await fetch("/api/place-order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

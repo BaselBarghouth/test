@@ -37,7 +37,7 @@ export default function Header() {
       current: pathname === "/contact-us",
     },
   ];
-  const userNavigation = [{ name: "Your Profile", href: "/customer" }];
+  const userNavigation = [{ name: "Orders", href: "/order" }];
   return (
     <Disclosure as="nav" className="bg-white shadow">
       {({ open }) => (
