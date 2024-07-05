@@ -24,7 +24,7 @@ export default function Card({ hit }) {
     setTimeout(() => setButtonText("Add To Cart"), 2000); // Reset text after 2 seconds
   };
   return (
-    <div className="p-5 rounded flex flex-col gap-y-2 shadow-lg shadow-gray-500">
+    <div className="p-5  flex flex-col gap-y-2 shadow-lg shadow-gray-500">
       <div className="group relative ">
         <div className="aspect-h-1  w-full rounded-md bg-gray-200">
           <Image
@@ -95,10 +95,10 @@ export default function Card({ hit }) {
                 disabled={!size.inStock}
               >
                 <div className="flex flex-col">
-                  <div className="font-semibold text-gray-500  text-xs ">
-                    X {size.qty}
+                  <div className={"font-semibold text-xs "}>
+                    X {size.qty} pieces 
                   </div>
-                  <div className="font-semibold text-gray-500  text-xs">
+                  <div className="font-semibold text-xs">
                     € {size.price}/Per Item
                   </div>
                 </div>

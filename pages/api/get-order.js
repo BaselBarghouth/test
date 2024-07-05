@@ -25,7 +25,7 @@ const doRequest = async (url, method) => {
       headers,
     };
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/${url}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/${url}`,
       options
     );
 

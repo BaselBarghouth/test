@@ -1,7 +1,6 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
-import { getServerSession } from 'next-auth'
 import { getSession } from 'next-auth/react'
 
 
@@ -10,38 +9,38 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example({ orders ,orders2}) {
+export default function Example({ orders }) {
 
 
-  const test = orders2.map(({order,orderItems}) => {
-    const { id,attributes:{ address, status, total, createdAt} } = order
-    const data = orderItems.map((item) => {
-      const { product, qty, quantity_and_price } = item.attributes
-      const { data: { attributes: product_attributes } } = product;
+  const mappedOrders = orders.map(({ order, orderItems }) => {
+    const { id, attributes: { address, status, total, createdAt } } = order
+    const data = orderItems.map(({ id, attributes }) => {
+      const { product, qty, quantity_and_price } = attributes
+      console.log()
+
       const { data: { attributes: quantity_and_prices_attributes } } = quantity_and_price;
       return {
-        name: product_attributes.name,
-        color: product_attributes.color,
+        name: attributes.name,
+        color: attributes.color,
         size: qty * quantity_and_prices_attributes.qty,
-        imageSrc: product_attributes.image_2,
-        country: product_attributes.country,
+        imageSrc: `/images/${changeString(product.data?.attributes.name)}.jpg`,
+        country: attributes.country,
         step: 1,
-  
+
       }
     })
     // const normalizedStatus = status.trim().toLowerCase();
     // const step = 'pending' == normalizedStatus ? 0 : 'processing' == normalizedStatus ? 1 : 'shipped' == normalizedStatus ? 2 : 3;
     return {
-      number:id,
+      number: id,
       address,
       status,
       total,
-      createdDatetime:createdAt,
-      createdDate:createdAt,
+      createdDatetime: createdAt,
+      createdDate: createdAt,
       products: data
     }
   })
-console.log
 
   return (
     <div className="bg-white">
@@ -59,7 +58,7 @@ console.log
           <h2 className="sr-only">Recent orders</h2>
           <div className="mx-auto max-w-7xl sm:px-2 lg:px-8">
             <div className="mx-auto max-w-2xl space-y-8 sm:px-4 lg:max-w-4xl lg:px-0">
-              {test.map((order) => (
+              {mappedOrders.map((order) => (
                 <div
                   key={order.number}
                   className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
@@ -77,12 +76,12 @@ console.log
                       <div className="hidden sm:block">
                         <dt className="font-medium text-gray-900">Date placed</dt>
                         <dd className="mt-1 text-gray-500">
-                          <time dateTime={order.createdDatetime}>{order.createdDate}</time>
+                          <time dateTime={order.createdDatetime}>{new Date(order.createdDate).toDateString()}</time>
                         </dd>
                       </div>
                       <div>
                         <dt className="font-medium text-gray-900">Total amount</dt>
-                        <dd className="mt-1 font-medium text-gray-900">  {order.total}</dd>
+                        <dd className="mt-1 font-medium text-gray-900">€  {order.total}</dd>
                       </div>
                     </dl>
 
@@ -211,8 +210,8 @@ console.log
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   const { data } = await doRequest(`orders/?filters[user][email][$eq]=${session.user.email}&populate=*`, "GET");
-  const orders2 = await Promise.all(data.map(async (order) => {
-    const { attributes: { order_items} } = order
+  const orders = await Promise.all(data.map(async (order) => {
+    const { attributes: { order_items } } = order
     const orderItemsPromises = order_items.data.map(async (item) => {
       const { id } = item;
       const orderItem = await doRequest(`order-items/${id}?populate=*`, "GET");
@@ -225,37 +224,10 @@ export async function getServerSideProps(context) {
       orderItems
     }
   }))
-  const orders = [
-    {
-      number: 'WU88191111',
-      href: '#',
-      invoiceHref: '#',
-      createdDate: 'Jul 6, 2021',
-      createdDatetime: '2021-07-06',
-      deliveredDate: 'July 12, 2021',
-      deliveredDatetime: '2021-07-12',
-      total: '$160.00',
-      products: [
-        {
-          id: 1,
-          name: 'Micro Backpack',
-          description:
-            'Are you a minimalist looking for a compact carry option? The Micro Backpack is the perfect size for your essential everyday carry items. Wear it like a backpack or carry it like a satchel for all-day use.',
-          href: '#',
-          price: '$70.00',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/order-history-page-03-product-01.jpg',
-          imageAlt:
-            'Moss green canvas compact backpack with double top zipper, zipper front pouch, and matching carry handle and backpack straps.',
-        },
-        // More products...
-      ],
-    },
-    // More orders...
-  ]
+ 
   return {
     props: {
-      orders,
-      orders2
+      orders
     },
   };
 }
@@ -285,3 +257,14 @@ const doRequest = async (url, method) => {
     return null; // Or throw an error or handle as needed
   }
 };
+
+function changeString(string){
+  if (typeof string !== "string") {
+    return "";
+  }
+  // Convert to lowercase
+  var lowercaseString = string.toLowerCase();
+  
+  // Replace spaces with underscores
+  return lowercaseString.replace(/ /g, "_");
+    }

@@ -13,11 +13,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SignOutButton from "./auth/logout-button";
-import Cart from "./Cart";
 import { useSession } from "next-auth/react";
+import { Bars3Icon, ShoppingBagIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import useCartStore from "../utils/cartStore";
+import CartV2 from "./CartV2";
+import { useState } from "react";
 export default function Header() {
   const session = useSession();
   const user = session.data?.user;
+  const cart = useCartStore((state) => state.cart);
+  const length = cart.length;
+  const [openCart, setOpenCart] = useState(false);
+
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -30,7 +37,7 @@ export default function Header() {
       href: "/categories",
       current: pathname === "/categories",
     },
-    { name: "About us", href: "/about-us", current: pathname === "/about-us" },
+    // { name: "About us", href: "/about-us", current: pathname === "/about-us" },
     {
       name: "Contact us",
       href: "/contact-us",
@@ -50,7 +57,7 @@ export default function Header() {
                     height={500}
                     width={500}
                     className="h-14 w-auto"
-                    src="/logo.jpeg"
+                    src="/logo.png"
                     alt="Your Company"
                   />
                 </div>
@@ -72,78 +79,100 @@ export default function Header() {
                 </div>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
-
                 {/* Profile dropdown */}
                 {user ? (
                   <>
-                  <Cart />
+                    {/* <Cart /> */}
+                    <button onClick={() => setOpenCart(!openCart)}>
+                      <ShoppingBagIcon
+                        className="h-6 w-6 flex-shrink-0 text-yellow-600 "
+                        aria-hidden="true"
+                      />
+                    </button>
 
-                  <Menu as="div" className="relative ml-4 flex-shrink-0">
-                    <div>
-                      <MenuButton className="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">Open user menu</span>
-                        <Image
-                          height={500}
-                          width={500}
-                          className="h-8 w-8 rounded-full"
-                          src={user.image}
-                          alt=""
-                        />
-                      </MenuButton>
-                    </div>
-                    <Transition
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {userNavigation.map((item) => (
-                          <MenuItem key={item.name}>
+                    <span className="ml-2 text-sm font-medium text-yellow-700 ">
+                      {length}
+                    </span>
+                    <CartV2 open={openCart} setOpen={setOpenCart} />
+
+                    <Menu as="div" className="relative ml-4 flex-shrink-0">
+                      <div>
+                        <MenuButton className="relative flex rounded-full bg-white focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+                          <span className="absolute -inset-1.5" />
+                          <span className="sr-only">Open user menu</span>
+                          <Image
+                            height={500}
+                            width={500}
+                            className="h-8 w-8 rounded-full"
+                            src={user.image}
+                            alt=""
+                          />
+                        </MenuButton>
+                      </div>
+                      <Transition
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {userNavigation.map((item) => (
+                            <MenuItem key={item.name}>
+                              {({ focus }) => (
+                                <Link
+                                  href={item.href}
+                                  className={classNames(
+                                    focus ? "bg-gray-100" : "",
+                                    "block px-4 py-2 text-sm text-gray-700"
+                                  )}
+                                >
+                                  {item.name}
+                                </Link>
+                              )}
+                            </MenuItem>
+                          ))}
+                          <MenuItem>
                             {({ focus }) => (
-                              <Link
-                                href={item.href}
+                              <SignOutButton
                                 className={classNames(
                                   focus ? "bg-gray-100" : "",
                                   "block px-4 py-2 text-sm text-gray-700"
                                 )}
-                              >
-                                {item.name}
-                              </Link>
+                              />
                             )}
                           </MenuItem>
-                        ))}
-                        <MenuItem>
-                          {({ focus }) => (
-                            <SignOutButton
-                              className={classNames(
-                                focus ? "bg-gray-100" : "",
-                                "block px-4 py-2 text-sm text-gray-700"
-                              )}
-                            />
-                          )}
-                        </MenuItem>
-                      </MenuItems>
-                    </Transition>
-                  </Menu>
+                        </MenuItems>
+                      </Transition>
+                    </Menu>
                   </>
                 ) : (
                   <Link href="/login">Login</Link>
                 )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
+              <button onClick={() => setOpenCart(!openCart)}>
+                      <ShoppingBagIcon
+                        className="h-6 w-6 flex-shrink-0 text-yellow-600 "
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    <span className="ml-2 text-sm font-medium text-yellow-700 ">
+                      {length}
+                    </span>
+                    <CartV2 open={openCart} setOpen={setOpenCart} />
                 {/* Mobile menu button */}
                 <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-yellow-500">
                   <span className="absolute -inset-0.5" />
                   <span className="sr-only">Open main menu</span>
-                  {/* {open ? (
+                  {open ? (
+                    
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )} */}
+                  )}
                 </DisclosureButton>
               </div>
             </div>

@@ -1,9 +1,17 @@
-import { InstantSearch, Pagination, useInstantSearch } from "react-instantsearch";
+import {
+  InstantSearch,
+  useInstantSearch,
+  usePagination,
+} from "react-instantsearch";
 import CustomRefinementList from "../../components/CustomRefinementList";
 import algoliasearch from "algoliasearch/lite";
 import "instantsearch.css/themes/algolia.css";
 import CustomSearchBox from "../../components/CustomSearchBox";
 import CustomInfiniteHits from "../../components/CustomInfiniteHits";
+import Example from "@/components/pagination";
+import SearchResults from "@/components/SearchResults";
+import NoResultsBoundary from "@/components/NoResultsBoundary";
+import NoResults from "@/components/NoResults";
 
 export default function Layout({ searchQuery }) {
   const searchClient = algoliasearch(
@@ -20,28 +28,55 @@ export default function Layout({ searchQuery }) {
     "category",
   ];
   return (
-    <div className="mx-auto flex w-full max-w-8xl items-start gap-x-8 px-4 py-10 sm:px-6 lg:px-8 border-none">
-      <InstantSearch indexName={process.env.NODE_ENV === 'production' ? "production_api::product.product" : "development_api::product.product"} searchClient={searchClient}>
-        <aside className="sticky top-8 hidden w-66 shrink-0 lg:block border-r-2 border-yellow-500 px-2">
-          {searchFilters.map((filter, index) => (
-            <CustomRefinementList key={index} attribute={filter} />
-          ))}
-        </aside>
-        <main className="flex-1">
+    <div className="mx-auto flex flex-col w-full max-w-8xl items-start gap-x-8 px-4 py-10 sm:px-6 lg:px-8 border-none">
+      <InstantSearch
+        indexName={
+          process.env.NODE_ENV === "production"
+            ? "production_api::product.product"
+            : "development_api::product.product"
+        }
+        searchClient={searchClient}
+      >
+        <div className="ml-10">
         <CustomSearchBox query={searchQuery} />
-        <CustomInfiniteHits />
-          <div className="mt-20">
-            <CustomPagination />
-          </div>
-        </main>
+
+        </div>
+
+        <NoResultsBoundary fallback={<NoResults />}>
+          <SearchResults
+            searchFilters={searchFilters}
+          />
+        </NoResultsBoundary>
       </InstantSearch>
     </div>
   );
 }
 function CustomPagination() {
   const { results } = useInstantSearch();
+  const {
+    pages,
+    currentRefinement: currentPage,
+    nbHits,
+    nbPages: totalPages,
+    isFirstPage,
+    isLastPage,
+    canRefine,
+    refine,
+    createURL,
+  } = usePagination();
+
+  const handlePageChange = (page) => {
+    refine(page);
+  };
+
   return results.hits.length ? (
-    <Pagination style={{ display: "50px" }} />
+    <Example
+      currentPage={currentPage}
+      totalPages={totalPages}
+      onPageChange={handlePageChange}
+      isFirstPage={isFirstPage}
+      isLastPage={isLastPage}
+    />
   ) : (
     <></>
   );

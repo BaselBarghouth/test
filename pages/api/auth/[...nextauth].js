@@ -9,7 +9,7 @@ const providers = [
     authorize: async (credentials) => {
       try {
         const response = await fetch(
-          `${process.env.NEXT_PUBLIC_STRAPI_URL}/auth/local`,
+          `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/auth/local`,
           {
             method: "POST",
             headers: {
@@ -79,7 +79,7 @@ const doRequest = async (url, method, data) => {
         options.body = JSON.stringify(data);
       }
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_STRAPI_URL}/${url}`,
+        `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/${url}`,
         options
       );
       // Check if the response is ok (status in the range 200-299)

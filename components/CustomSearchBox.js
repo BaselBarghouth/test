@@ -1,3 +1,4 @@
+import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useEffect, useRef, useState } from "react";
 import {  useSearchBox } from "react-instantsearch";
 
@@ -17,7 +18,6 @@ export default function CustomSearchBox(props) {
       }
     }, [props.query]);
     return (
-      <div>
         <form
           action=""
           role="search"
@@ -44,10 +44,10 @@ export default function CustomSearchBox(props) {
           <div className="w-full sm:max-w-xs">
             <div className="relative">
               <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                {/* <MagnifyingGlassIcon
-                  className="h-5 w-5 text-gray-400"
+                <MagnifyingGlassIcon
+                  className="h-5 w-5 text-yellow-600"
                   aria-hidden="true"
-                /> */}
+                />
               </div>
               <input
                 id="search"
@@ -70,6 +70,5 @@ export default function CustomSearchBox(props) {
             </div>
           </div>
         </form>
-      </div>
     );
   }

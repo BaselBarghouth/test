@@ -11,7 +11,7 @@ export const hitToProduct = (hit) => {
   const product = {
     id: id,
     name: name,
-    imageSrc: image_2,
+    imageSrc: `${process.env.NEXT_PUBLIC_STRAPI_URL}${image[0].url}`,
     imageAlt: "Image of " + name,
     availableColors: [color],
     characteristics: {

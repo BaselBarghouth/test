@@ -5,7 +5,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function Page({ order, orderItems }) {
+export default function Page({ order, orderItems, orderId }) {
 
   const { address, status, total, createdAt } = order.data.attributes
   const data = orderItems.map((item) => {
@@ -16,9 +16,8 @@ export default function Page({ order, orderItems }) {
       name: product_attributes.name,
       color: product_attributes.color,
       size: qty * quantity_and_prices_attributes.qty,
-      imageSrc: product_attributes.image_2,
+      imageSrc: `${process.env.NEXT_PUBLIC_STRAPI_URL}${product_attributes.image}`,
       country: product_attributes.country,
-      step: 1,
 
     }
   })
@@ -47,12 +46,13 @@ export default function Page({ order, orderItems }) {
             </p>
             <dl className="mt-16 text-sm font-medium">
               <dt className="text-gray-900">Tracking number</dt>
-              <dd className="mt-2 text-yellow-600">{searchParams?.orderId}</dd>
+              <dd className="mt-2 text-yellow-600">#{orderId}</dd>
             </dl>
             <div className="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8">
-              <h4 className="sr-only">Status</h4>
+              
+              <p className="text-sm font-medium text-yellow-900">{status.toUpperCase()}</p>
               <p className="text-sm font-medium text-gray-900">
-                {status} on <time dateTime={createdAt}>{createdAt}</time>
+                on <time dateTime={createdAt}>{new Date(createdAt).toDateString()}</time>
               </p>
               <div className="mt-6" aria-hidden="true">
                 <div className="overflow-hidden rounded-full bg-gray-200">
@@ -77,19 +77,21 @@ export default function Page({ order, orderItems }) {
             </div>
             <ul
               role="list"
-              className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500"
+              className="mt-6 divide-y divide-gray-200 border-t border-gray-200 text-sm font-medium text-gray-500 grid grid-cols-2"
             >
               {data.map((product) => (
                 <li key={product.id} className="flex space-x-6 py-6">
                   <img
-                    src={product.imageSrc}
-                    alt={product.imageAlt}
+          src={`/images/${changeString(product.name)}.jpg`}                   
+           alt={product.imageAlt}
                     className="h-24 w-24 flex-none rounded-md bg-gray-100 object-cover object-center"
                   />
-                  <div className="flex-auto space-y-1">
-                    <h3 className="text-gray-900">
-                      <a href={'#'}>{product.name}</a>
+                  
+                  <div className="flex flex-col gap-y-4">
+                  <h3 className="text-gray-900">
+                     {product.name}
                     </h3>
+                    <div className="grid grid-cols-2">
                     <div
                       className={`h-8 w-8 rounded-full`}
                       style={{ backgroundColor: product.color }}
@@ -99,6 +101,8 @@ export default function Page({ order, orderItems }) {
                     <CircleFlag countryCode={product.country} height="32" width="32" />
 
                     <p>{product.size}</p>
+                    </div>
+
                   </div>
                 </li>
               ))}
@@ -160,7 +164,8 @@ export async function getServerSideProps(context) {
   return {
     props: {
       order,
-      orderItems
+      orderItems,
+      orderId
     },
   };
 }
@@ -176,7 +181,7 @@ const doRequest = async (url, method) => {
       headers,
     };
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_STRAPI_URL}/${url}`,
+      `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/${url}`,
       options
     );
 
@@ -190,3 +195,12 @@ const doRequest = async (url, method) => {
     return null; // Or throw an error or handle as needed
   }
 };
+
+function changeString(string){
+
+  // Convert to lowercase
+  var lowercaseString = string.toLowerCase();
+  
+  // Replace spaces with underscores
+  return lowercaseString.replace(/ /g, "_");
+    }
