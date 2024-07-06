@@ -12,7 +12,7 @@ export default function NoResults() {
           Oops, No items!
         </h1>
         <p className="mt-4 text-muted-foreground">
-          We couldn't find the items you are looking for: {indexUiState.query}
+          We could not find the items you are looking for: <strong > <div dangerouslySetInnerHTML={{__html:indexUiState?.query}}></div>  </strong>
         </p>
         <div className="mt-6 flex flex-col items-center gap-y-4">
           <Link
