@@ -11,7 +11,6 @@ import { useSession } from 'next-auth/react';
 export default function Example() {
 const session = useSession()
   const { cart, removeItem, clearCart, getTotalPrice } = useCartStore((state) => state)
-  
   const router = useRouter();
 
   const placeOrder = async (e) => {

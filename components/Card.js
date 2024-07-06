@@ -8,7 +8,6 @@ import { CircleFlag } from "react-circle-flags";
 import { useSession } from "next-auth/react";
 export default function Card({ hit }) {
   const product = hitToProduct(hit);
-  console.log("product", product);
   const [buttonText, setButtonText] = useState("Add To Cart");
   const session = useSession();
   const [selectedSizes, setSelectedSizes] = useState(product.sizes[0]);

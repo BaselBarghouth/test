@@ -2,37 +2,41 @@
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
-    // Process a POST request
-    // create order items we need, product id, quantity and prices id, qty
-    // create order, order items, status, user id, total, address id
-    const { cart, address, id: user, total } = req.body;
-    const orderItemsPromises = cart.map(async (item) => {
-      const { id, quantity, sizes } = item;
-      const orderItemResponse = await doRequest(
-        "order-items",
-        "POST",
-        {
-          product: id,
-          quantity_and_price: sizes.id,
-          qty: quantity,
-        }
-      );
-      return orderItemResponse.data.id;
-    });
+    try {
+      const { cart, address, id: user, total } = req.body;
+      
+      const orderItemsPromises = cart.map(async (item) => {
+        const { id, quantity, sizes } = item;
+        const orderItem = await doRequest("order-items", "POST", {
+          data: {
+            product: id,
+            quantity_and_price: sizes.id,
+            qty: quantity,
+          },
+        });
+        return orderItem.id;
+      });
 
-    //Wait for all promises to resolve
-    const orderItemsIds = await Promise.all(orderItemsPromises);
-
-    const orderResponse = await doRequest("orders", "POST", {
-      user,
-      address: address,
-      order_items: orderItemsIds,
-      total,
-    });
-    res.status(200).json({ orderId: orderResponse.data.id });
+      // Wait for all promises to resolve
+      const orderItemsIds = await Promise.all(orderItemsPromises);
+      const orderResponse = await doRequest("orders", "POST", {
+        data: { user, address, order_items: orderItemsIds, total},
+      });
+      if (orderResponse) {
+        res.status(200).json({ success: true, orderId: orderResponse.id });
+      } else {
+        res.status(500).json({ success: false, error: "Failed to create order" });
+      }
+    } catch (error) {
+      console.error("Error processing request:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+  } 
+  
+  else {
+    res.setHeader("Allow", ["POST"]);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
-
-  res.status(200).json({ name: "John Doe" });
 }
 
 const doRequest = async (url, method, data) => {
@@ -44,24 +48,19 @@ const doRequest = async (url, method, data) => {
     let options = {
       method,
       headers,
+      body: JSON.stringify(data), // Changed `data` to `body`
     };
-    if (data) {
-      options = {
-        ...options,
-        body: JSON.stringify({
-          data,
-        }),
-      };
-    }
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_STRAPI_URL}/api/${url}`,
       options
     );
-
     // Check if the response is ok (status in the range 200-299)
     if (res.ok) {
       const json = await res.json();
-      return json;
+      return json.data;
+    } else {
+      console.error(`Error: ${res.status} ${res.statusText}`);
+      return null;
     }
   } catch (error) {
     console.error("Error making request:", error);

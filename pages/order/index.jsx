@@ -16,8 +16,6 @@ export default function Example({ orders }) {
     const { id, attributes: { address, status, total, createdAt } } = order
     const data = orderItems.map(({ id, attributes }) => {
       const { product, qty, quantity_and_price } = attributes
-      console.log()
-
       const { data: { attributes: quantity_and_prices_attributes } } = quantity_and_price;
       return {
         name: attributes.name,

@@ -1,4 +1,4 @@
-export default async function placeOrderAction(cart, address, id, total) {
+export default async function placeOrderAction(cart,address,id,total) {
   try {
     const order = await fetch("/api/place-order", {
       method: "POST",
