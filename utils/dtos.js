@@ -8,6 +8,7 @@ export const hitToProduct = (hit) => {
       id: q.id,
     };
   });
+  console.log("image_2",hit)
   const product = {
     id: id,
     name: name,

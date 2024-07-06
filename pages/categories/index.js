@@ -31,9 +31,10 @@ export default function Layout({ searchQuery }) {
     <div className="mx-auto flex flex-col w-full max-w-8xl items-start gap-x-8 px-4 py-10 sm:px-6 lg:px-8 border-none">
       <InstantSearch
         indexName={
-          process.env.NODE_ENV === "production"
-            ? "production_api::product.product"
-            : "development_api::product.product"
+          "production_api::product.product"
+          // process.env.NODE_ENV === "production"
+          //   ? "production_api::product.product"
+          //   : "development_api::product.product"
         }
         searchClient={searchClient}
       >

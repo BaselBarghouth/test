@@ -8,6 +8,7 @@ import { CircleFlag } from "react-circle-flags";
 import { useSession } from "next-auth/react";
 export default function Card({ hit }) {
   const product = hitToProduct(hit);
+  console.log("product", product);
   const [buttonText, setButtonText] = useState("Add To Cart");
   const session = useSession();
   const [selectedSizes, setSelectedSizes] = useState(product.sizes[0]);
@@ -28,7 +29,7 @@ export default function Card({ hit }) {
       <div className="group relative ">
         <div className="aspect-h-1  w-full rounded-md bg-gray-200">
           <Image
-            src={`/images/${changeString(product.name)}.jpg`}
+            src={product.imageSrc}
             alt={product.imageAlt}
             className="h-full w-full object-cover object-center group-hover:opacity-75"
             width={600}

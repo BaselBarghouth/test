@@ -13,7 +13,7 @@ export default function SignIn() {
           height={1000}
           width={1000}
           className="mx-auto h-40 w-auto"
-          src="/logo.png"
+          src="/logo.jpeg"
           alt="Your Company"
         />
         <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">

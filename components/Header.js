@@ -57,7 +57,7 @@ export default function Header() {
                     height={500}
                     width={500}
                     className="h-14 w-auto"
-                    src="/logo.png"
+                    src="/logo.jpeg"
                     alt="Your Company"
                   />
                 </div>

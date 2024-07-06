@@ -10,6 +10,7 @@ import useCartStore from "../utils/cartStore";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 const products = [
   {
     id: 1,
@@ -39,12 +40,9 @@ const products = [
 ];
 
 export default function CartV2({ open, setOpen }) {
-  const router = useRouter();
   const cart = useCartStore((state) => state.cart);
-  const clearCart = useCartStore((state) => state.clearCart);
   const removeItem = useCartStore((state) => state.removeItem);
   const getTotalPrice = useCartStore((state) => state.getTotalPrice);
-  console.log(cart);
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
       <DialogBackdrop
@@ -87,7 +85,9 @@ export default function CartV2({ open, setOpen }) {
                         {cart.map((product) => (
                           <li key={product.id} className="flex py-6">
                             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
-                              <img
+                              <Image
+                              height={500} 
+                              width={500}
                                 alt={product.imageAlt}
                                 src={product.imageSrc}
                                 className="h-full w-full object-cover object-center"
