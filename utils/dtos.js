@@ -11,7 +11,7 @@ export const hitToProduct = (hit) => {
   const product = {
     id: id,
     name: name,
-    imageSrc: `${process.env.NEXT_PUBLIC_STRAPI_URL}${image[0].url}`,
+    imageSrc: `/images/${changeString(name)}.jpg`,
     imageAlt: "Image of " + name,
     availableColors: [color],
     characteristics: {
@@ -27,3 +27,15 @@ export const hitToProduct = (hit) => {
 
     return product;
 };
+
+
+function changeString(string) {
+  if (typeof string !== "string") {
+    return "";
+  }
+  // Convert to lowercase
+  var lowercaseString = string.toLowerCase();
+
+  // Replace spaces with underscores
+  return lowercaseString.replace(/ /g, "_");
+}

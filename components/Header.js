@@ -53,6 +53,7 @@ export default function Header() {
             <div className="flex h-16 justify-between">
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
+                  <Link href="/"> 
                   <Image
                     height={500}
                     width={500}
@@ -60,6 +61,7 @@ export default function Header() {
                     src="/logo.jpeg"
                     alt="Your Company"
                   />
+                  </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {navigation.map((item, index) => (
@@ -148,7 +150,9 @@ export default function Header() {
                     </Menu>
                   </>
                 ) : (
-                  <Link href="/login">Login</Link>
+                  <Link 
+                  className="inline-block rounded-md border border-transparent bg-yellow-600 px-6 py-2 font-medium text-white hover:bg-yellow-700"
+                  href="/login">Login</Link>
                 )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">

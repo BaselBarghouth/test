@@ -1,19 +1,14 @@
-import {
-  InstantSearch,
-  useInstantSearch,
-  usePagination,
-} from "react-instantsearch";
-import CustomRefinementList from "../../components/CustomRefinementList";
+import { InstantSearch } from "react-instantsearch";
 import algoliasearch from "algoliasearch/lite";
 import "instantsearch.css/themes/algolia.css";
 import CustomSearchBox from "../../components/CustomSearchBox";
-import CustomInfiniteHits from "../../components/CustomInfiniteHits";
-import Example from "@/components/pagination";
 import SearchResults from "@/components/SearchResults";
 import NoResultsBoundary from "@/components/NoResultsBoundary";
 import NoResults from "@/components/NoResults";
+import { useRouter } from "next/router";
 
 export default function Layout({ searchQuery }) {
+  const { query } = useRouter();
   const searchClient = algoliasearch(
     process.env.NEXT_PUBLIC_ALGOLIA_APP_ID,
     process.env.NEXT_PUBLIC_ALGOLIA_ADMIN_KEY
@@ -39,46 +34,13 @@ export default function Layout({ searchQuery }) {
         searchClient={searchClient}
       >
         <div className="ml-10">
-        <CustomSearchBox query={searchQuery} />
-
+          <CustomSearchBox query={query?.s} />
         </div>
 
         <NoResultsBoundary fallback={<NoResults />}>
-          <SearchResults
-            searchFilters={searchFilters}
-          />
+          <SearchResults searchFilters={searchFilters} />
         </NoResultsBoundary>
       </InstantSearch>
     </div>
-  );
-}
-function CustomPagination() {
-  const { results } = useInstantSearch();
-  const {
-    pages,
-    currentRefinement: currentPage,
-    nbHits,
-    nbPages: totalPages,
-    isFirstPage,
-    isLastPage,
-    canRefine,
-    refine,
-    createURL,
-  } = usePagination();
-
-  const handlePageChange = (page) => {
-    refine(page);
-  };
-
-  return results.hits.length ? (
-    <Example
-      currentPage={currentPage}
-      totalPages={totalPages}
-      onPageChange={handlePageChange}
-      isFirstPage={isFirstPage}
-      isLastPage={isLastPage}
-    />
-  ) : (
-    <></>
   );
 }

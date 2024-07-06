@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link"
 import { CircleFlag } from "react-circle-flags";
+import { getSession } from 'next-auth/react'
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -148,6 +149,16 @@ export default function Page({ order, orderItems, orderId }) {
 
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  if(!session?.user){
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      }
+    }
   const { orderId } = context.query;
 
   const id = orderId

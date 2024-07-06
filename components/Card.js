@@ -6,6 +6,7 @@ import useCartStore from "../utils/cartStore";
 import { Radio, RadioGroup } from "@headlessui/react";
 import { CircleFlag } from "react-circle-flags";
 import { useSession } from "next-auth/react";
+import Link from "next/link";
 export default function Card({ hit }) {
   const product = hitToProduct(hit);
   const [buttonText, setButtonText] = useState("Add To Cart");
@@ -30,7 +31,7 @@ export default function Card({ hit }) {
           <Image
             src={product.imageSrc}
             alt={product.imageAlt}
-            className="h-full w-full object-cover object-center group-hover:opacity-75"
+            className=" h-72  w-full object-cover object-center group-hover:opacity-75"
             width={600}
             height={600}
           />
@@ -48,20 +49,28 @@ export default function Card({ hit }) {
 
       <div className="grid grid-cols-2 gap-y-2">
         <div className="flex items-center rounded-bl-lg border border-transparent text-sm font-semibold text-gray-500">
-          <Image src={'/flower-length.svg'} alt={product.imageAlt} width={32} height={32}/>
+          <Image
+            src={"/flower-length.svg"}
+            alt={product.imageAlt}
+            width={32}
+            height={32}
+          />
           <span className="ml-2">{product.characteristics.height} cm</span>
         </div>
 
         <div className="flex items-center rounded-bl-lg border border-transparent text-sm font-semibold text-gray-500">
-          <Image src={'/wieght.svg'} alt={product.imageAlt}  width={32} height={32}/>
+          <Image
+            src={"/wieght.svg"}
+            alt={product.imageAlt}
+            width={32}
+            height={32}
+          />
           <span className="ml-2">{product.weight} gr</span>
         </div>
         <div
           className={`h-8 w-8 rounded-full`}
           style={{ backgroundColor: product.availableColors[0] }}
-        >
-
-        </div>
+        ></div>
         <CircleFlag countryCode={product.country} height="32" width="32" />
       </div>
       <div>
@@ -69,14 +78,14 @@ export default function Card({ hit }) {
           Grower: {product?.grower || "Test"}
         </span>
       </div>
-      {session?.data?.user && (
+      {session?.data?.user ? (
         <>
           <RadioGroup
             value={selectedSizes}
             onChange={setSelectedSizes}
             className="flex items-center space-x-3"
           >
-            {product.sizes.map((size,index) => (
+            {product.sizes.map((size, index) => (
               <Radio
                 key={index}
                 value={size}
@@ -96,7 +105,7 @@ export default function Card({ hit }) {
               >
                 <div className="flex flex-col">
                   <div className={"font-semibold text-xs "}>
-                    X {size.qty} pieces 
+                    X {size.qty} pieces
                   </div>
                   <div className="font-semibold text-xs">
                     € {size.price}/Per Item
@@ -114,16 +123,19 @@ export default function Card({ hit }) {
             {buttonText}
           </button>
         </>
-      )}
+      ) : <Link 
+      href="/login"
+      className="w-full outline-none rounded-md border border-transparent bg-yellow-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+
+      > Long in so you can purchase our products</Link>}
     </div>
   );
 }
 
-function changeString(string){
-
+function changeString(string) {
   // Convert to lowercase
   var lowercaseString = string.toLowerCase();
-  
+
   // Replace spaces with underscores
   return lowercaseString.replace(/ /g, "_");
-    }
+}

@@ -1,5 +1,4 @@
 
-'use client';
 import { CheckIcon, ClockIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import useCartStore from '@/utils/cartStore';
 import { useRouter } from 'next/navigation';
@@ -8,7 +7,7 @@ import Image from 'next/image';
 import { CircleFlag } from 'react-circle-flags';
 import { useSession } from 'next-auth/react';
 
-export default function Example() {
+export default function Cart() {
 const session = useSession()
   const { cart, removeItem, clearCart, getTotalPrice } = useCartStore((state) => state)
   const router = useRouter();
