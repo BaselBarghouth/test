@@ -30,11 +30,9 @@ export const hitToProduct = (hit) => {
 
 
 function changeString(string) {
-  if (typeof string !== "string") {
-    return "";
-  }
+  if (!string) return "";
   // Convert to lowercase
-  var lowercaseString = string.toLowerCase();
+  var lowercaseString = string.toLowerCase().replace("/", "");
 
   // Replace spaces with underscores
   return lowercaseString.replace(/ /g, "_");
