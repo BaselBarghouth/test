@@ -18,8 +18,9 @@ const session = useSession()
     const total = getTotalPrice()
     const order = await placeOrderAction(cart,address,id,total);
     if(order.success){
-      clearCart()
       router.push(`/confirm/${order.orderId}`);
+      clearCart()
+
     }
 
   };

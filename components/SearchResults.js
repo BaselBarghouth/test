@@ -1,12 +1,10 @@
 import React from "react";
 import CustomRefinementList from "./CustomRefinementList";
-import CustomSearchBox from "./CustomSearchBox";
 import CustomInfiniteHits from "./CustomInfiniteHits";
 import { useInstantSearch, usePagination } from "react-instantsearch";
 import Example from "./pagination";
 
 export default function SearchResults({ searchFilters }) {
-  const { results: {nbHits} } = useInstantSearch();
 
   return (
     // nbHits > 0 ?

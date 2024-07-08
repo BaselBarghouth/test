@@ -21,7 +21,10 @@ export default function CustomRefinementList(props) {
     items.length > 0 && (
       <div className=" mt-4 shadow-md  shadow-gray-400 p-4">
         <legend className="text-sm font-semibold leading-6 text-gray-900">
-          {props.attribute.charAt(0).toUpperCase() + props.attribute.slice(1)} :
+          {(props.attribute.charAt(0).toUpperCase() + props.attribute.slice(1))
+            .split("_")
+            .join(" ")}{" "}
+          :
         </legend>
         {items.map((item, index) => (
           <div key={"filter" + index} className="relative flex gap-x-3">
@@ -36,26 +39,29 @@ export default function CustomRefinementList(props) {
               />
             </div>
             <div className="flex items-center space-x-2">
-      {props.attribute === "color" && (
-        <div
-          className="h-4 w-4 rounded-full"
-          style={{ backgroundColor: item.value }}
-        ></div>
-      )}
-      {props.attribute === "country" && (
-        <CircleFlag countryCode={item.value} height="20" width="20" />
-      )}
-      {props.attribute === "length" && (
-        <span className="text-gray-900">{item.value} cm</span>
-      )}
-      {props.attribute === "weight" && (
-        <span className="text-gray-900">{item.value} gr</span>
-      )}
-      {props.attribute === "grower" && (
-        <span className="text-gray-900">{item.value}</span>
-      )}
-      <span className="text-yellow-800">({item.count})</span>
-    </div>
+              {props.attribute === "color" && (
+                <div
+                  className="h-4 w-4 rounded-full"
+                  style={{ backgroundColor: item.value }}
+                ></div>
+              )}
+              {props.attribute === "country" && (
+                <CircleFlag countryCode={item.value} height="20" width="20" />
+              )}
+              {props.attribute === "length" && (
+                <span className="text-gray-900">{item.value} cm</span>
+              )}
+              {props.attribute === "weight" && (
+                <span className="text-gray-900">{item.value} gr</span>
+              )}
+              {props.attribute === "grower" && (
+                <span className="text-gray-900">{item.value}</span>
+              )}
+              {props.attribute === "buds_per_stem" && (
+                <span className="text-gray-900">{item.value}</span>
+              )}
+              <span className="text-yellow-800">({item.count})</span>
+            </div>
           </div>
         ))}
       </div>
