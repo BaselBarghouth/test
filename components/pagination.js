@@ -34,20 +34,15 @@ export default function Example({
         )}
       </div>
       <div className="hidden md:-mt-px md:flex">
-        {getPageNumbers().map((page) => (
-          <button
-            key={page}
-            onClick={() => onPageChange(page)}
-            aria-current={page === currentPage ? "page" : undefined}
-            className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium ${
-              page === currentPage
-                ? "border-yellow-500 text-yellow-600"
-                : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-            }`}
-          >
-            {page + 1}
-          </button>
-        ))}
+        {/* {getPageNumbers().map((page) => ( */}
+
+        <button
+          aria-current={"page"}
+          className={`inline-flex items-center border-t-2 px-4 pt-4 text-sm font-medium  border-yellow-500 text-yellow-600`}
+        >
+          {currentPage + 1}
+        </button>
+        {/* ))} */}
       </div>
       <div className="-mt-px flex w-0 flex-1 justify-end">
         {!isLastPage && (

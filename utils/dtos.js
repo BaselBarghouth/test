@@ -1,5 +1,5 @@
 export const hitToProduct = (hit) => {
-  const { id, name, image, color, length, diameter, grower,quantity_and_prices,country ,weight,image_2} = hit;
+  const { id, name, color, length, diameter, grower,quantity_and_prices,country ,weight,buds_per_stem} = hit;
   let sizes = quantity_and_prices.map((q) => {
     return {
       qty: q.qty,
@@ -22,7 +22,8 @@ export const hitToProduct = (hit) => {
     quantity: 1,
     sizes,
     country,
-    weight
+    weight,
+    buds_per_stem
   }
 
     return product;
