@@ -101,7 +101,7 @@ export default function Page({ order, orderItems, orderId }) {
                     </div>
                     <CircleFlag countryCode={product.country} height="32" width="32" />
 
-                    <p>{product.size}</p>
+                    <p>{product.size} pieces</p>
                     </div>
 
                   </div>
