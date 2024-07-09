@@ -16,8 +16,8 @@ const providers = [
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              identifier: 'test@test.com',
-              password: 'Test321!@',
+              identifier: credentials.email,
+              password: credentials.password,
             }),
           }
         );
