@@ -27,7 +27,7 @@ export default function CustomRefinementList(props) {
           :
         </legend>
         {items.map((item, index) => (
-          <div key={"filter" + index} className="relative flex gap-x-3">
+        item.value != 'il' &&  <div key={"filter" + index} className="relative flex gap-x-3">
             <div className="flex h-6 items-center">
               <input
                 id={props.attribute}
@@ -59,6 +59,9 @@ export default function CustomRefinementList(props) {
               )}
               {props.attribute === "buds_per_stem" && (
                 <span className="text-gray-900">{item.value}</span>
+              )}
+                    {props.attribute === "category" && (
+                <span className="text-gray-900">{item.value.charAt(0).toUpperCase() + item.value.slice(1)}</span>
               )}
               <span className="text-yellow-800">({item.count})</span>
             </div>
