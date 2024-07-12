@@ -1,27 +1,28 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-export default function RegisterButton({email, name, phone,address, description, title ='Register'}) {
+export default function RegisterButton({ name,title ='Request Product', country, grower, additionalInformation}) {
 const router =   useRouter()
-
   const [error, setError] = useState(null);
   const handleRegisterForm = async (event) => {
+
       const body = JSON.stringify({
         data:{
-          email, name, phone,address, description
+          name, country, grower, additionalInformation
       }
       });
     try {
-       const data =  await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/registers`, {
+       const data =  await fetch(`/api/request-product`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_STRAPI_REGISTER_TOKEN}`
         },
         body,
        }  );
          const json = await data.json();
-         router.push(`register/confirm`);
+         if(json.success){
+          router.push(`request-product/confirm`);
+         }
     } catch (error) {
       console.log({error});
         setError(error.message);

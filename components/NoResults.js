@@ -24,7 +24,7 @@ export default function NoResults() {
           </Link>
 
           <Link
-            href="/categories?s="
+            href="/request-product"
             className="w-60 rounded-md border border-transparent bg-yellow-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-yellow-700"
             prefetch={false}
           >
